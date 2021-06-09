@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using System.Data.SQLite;
 
+using Server.Database;
 using Server.Abstract;
 using Server.Models;
 
@@ -14,10 +16,10 @@ namespace Server
     {
         private readonly ILogger<MessengerServer> _logger;
         IDbContext _dbContext;
-        public MessengerServer(ILogger<MessengerServer> logger, IDbContext dbContext)
+        public MessengerServer(ILogger<MessengerServer> logger)
         {
             _logger = logger;
-            _dbContext = dbContext;
+            _dbContext = new DbContextDapper(new SQLiteConnection("Data Source=/Users/igorkuzmenko/Documents/programming/learning/C#/di/messenger/Server/dbfile.sqllite3;Cache=Shared"));
         }
 
         public override Task<StatusReply> Recieve(SentMessage request, ServerCallContext context)

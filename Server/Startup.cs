@@ -24,10 +24,6 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-
-            services.AddTransient<IDbConnection>((sp) => new SQLiteConnection("Data Source=/Users/igorkuzmenko/Documents/programming/learning/C#/di/messenger/Server/dbfile.sqllite3;Cache=Shared"));
-            
-            services.AddScoped<IDbContext, DbContextDapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
