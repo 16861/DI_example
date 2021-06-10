@@ -8,9 +8,9 @@ using System.Linq;
 namespace Server.Database {
    public class DbContextDapper : IDbContext {
        readonly IDbConnection conn;
-       public DbContextDapper(IDbConnection dbcon)
+       public DbContextDapper(IDbHelper dbHelper)
        {
-           conn = dbcon;
+           conn = dbHelper.GetDbConnection();
            conn.Open();
        }
 
@@ -23,8 +23,8 @@ namespace Server.Database {
        } 
 
        public void SaveNewMessage(MessageModel message) {
-           string insertQuery = "INSERT INTO Messages(name, text, time) values(@name, @text, @time)";
-           conn.Execute(insertQuery, new {message.Name, message.Text, message.Time});
+           string insertQuery = "INSERT INTO Messages(name, text, time, isencrypted) values(@name, @text, @time, @isencrypted)";
+           conn.Execute(insertQuery, new {message.Name, message.Text, message.Time, message.IsEncrypted});
        }
 
         public VersionsModel GetVersions()
