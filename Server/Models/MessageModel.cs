@@ -11,5 +11,7 @@ namespace Server.Models
         public string Text {get; set;}
         [BindProperty]
         public string Time {get; set;}
+        [BindProperty]
+        public int IsEncrypted {get; set;}
     }
 }
