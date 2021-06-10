@@ -2,15 +2,23 @@ using System;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Options;
 
 using Server.Abstract;
+using Server.Config;
 
 namespace Server.Crypto
 {
     public class Encryption : IEncrypt
     {
+        readonly string EncryptionKey = "";
+
+        public Encryption(IOptions<AppConfig> appConfig)
+        {
+            EncryptionKey = appConfig.Value.EncryptionKey;
+        }
+
         public string Encrypt(string input) {
-            string EncryptionKey = "abc123";
             byte[] clearBytes = Encoding.Unicode.GetBytes(input);
             using (Aes encryptor = Aes.Create())
             {
@@ -31,7 +39,6 @@ namespace Server.Crypto
         }
 
         public string Decrypt(string encrypted) {
-            string EncryptionKey = "abc123";
             encrypted = encrypted.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(encrypted);
             using (Aes encryptor = Aes.Create())

@@ -17,16 +17,21 @@ namespace Server
     {
         private readonly ILogger<MessengerServer> _logger;
         IDbContext _dbContext;
-        public MessengerServer(ILogger<MessengerServer> logger)
+        IEncrypt _encrypt;
+        public MessengerServer(ILogger<MessengerServer> logger, IDbContext dbContext, IEncrypt encrypt)
         {
             _logger = logger;
-            _dbContext = new DbContextDapper(new SQLiteConnection("Data Source=/Users/igorkuzmenko/Documents/programming/learning/C#/di/messenger/Server/dbfile.sqllite3;Cache=Shared"));
+            _dbContext = dbContext;
+            _encrypt = encrypt;
         }
 
         public override Task<StatusReply> Recieve(SentMessage request, ServerCallContext context)
         {
             var time = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
-            _dbContext.SaveNewMessage(new MessageModel() { Name = request.Name, Text = request.Text, Time = time });
+            if (request.IsEncrypted) 
+                request.Text = _encrypt.Encrypt(request.Text);
+
+            _dbContext.SaveNewMessage(new MessageModel() { Name = request.Name, Text = request.Text, Time = time, IsEncrypted = (request.IsEncrypted ? 1 : 0)});
             _dbContext.UpdateVersion(time);
 
             return Task.FromResult(new StatusReply
@@ -46,6 +51,8 @@ namespace Server
             };
 
             foreach(var message in allMessages) {
+                if (message.IsEncrypted == 1)
+                    message.Text = _encrypt.Decrypt(message.Text);
                 reply.UserMessages.Add(new UserMessage() { Name = message.Name, Text = message.Text, Time = message.Time });
             }
             return Task.FromResult(reply);

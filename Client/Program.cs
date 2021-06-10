@@ -11,9 +11,19 @@ namespace GrpcMessangerClient
 {
     class Program
     {
+        static bool isEncrypted = false;
+
         static async Task Main(string[] args)
         {
             System.Console.WriteLine("Starting client...");
+            if (args.Length > 0) {
+                System.Console.WriteLine($"Got console argument{args[0]}");
+                if (args[0].Contains("encryptedMessages")) {
+                    isEncrypted = true;
+                    System.Console.WriteLine("messages will be encrypted");
+                }
+            }
+
             using var channel = GrpcChannel.ForAddress("http://localhost:5000");
             var client = new Messenger.MessengerClient(channel);
 
@@ -31,7 +41,8 @@ namespace GrpcMessangerClient
                 var response = await client.RecieveAsync(new SentMessage()
                 {
                     Name = name,
-                    Text = message
+                    Text = message,
+                    IsEncrypted = isEncrypted
                 });
                 if (response.StatusCode != 0)
                     Console.WriteLine("Error occured");
