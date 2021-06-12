@@ -1,5 +1,4 @@
 using System.Data.SQLite;
-using Microsoft.Extensions.Options;
 using System.Data;
 
 
@@ -12,9 +11,9 @@ namespace Server.Database
     {
         string sqllite3ConnectionString;
 
-        public DbHelper(IOptions<AppConfig> _appConfig)
+        public DbHelper(AppConfig _appConfig)
         {
-            sqllite3ConnectionString = _appConfig.Value.ConnectionStrings.SqlLite3;
+            sqllite3ConnectionString = _appConfig.ConnectionStrings.SqlLite3;
         }
 
         public IDbConnection GetDbConnection() {

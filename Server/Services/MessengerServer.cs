@@ -10,6 +10,8 @@ using System.Data.SQLite;
 using Messange;
 using Server.Abstract;
 using Server.Models;
+using Server.Database;
+using Server.Crypto;
 
 namespace Server
 {
@@ -18,11 +20,11 @@ namespace Server
         private readonly ILogger<MessengerServer> _logger;
         IDbContext _dbContext;
         IEncrypt _encrypt;
-        public MessengerServer(ILogger<MessengerServer> logger, IDbContext dbContext, IEncrypt encrypt)
+        public MessengerServer(ILogger<MessengerServer> logger)
         {
             _logger = logger;
-            _dbContext = dbContext;
-            _encrypt = encrypt;
+            _dbContext = new DbContextDapper(new DbHelper(Startup.CurrentAppConfig));
+            _encrypt = new Encryption(Startup.CurrentAppConfig);
         }
 
         public override Task<StatusReply> Recieve(SentMessage request, ServerCallContext context)

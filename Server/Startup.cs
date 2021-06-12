@@ -24,6 +24,8 @@ namespace Server
     {
         IConfigurationRoot Configuration;
 
+        public static AppConfig CurrentAppConfig {get; private set;}
+
         public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -39,11 +41,7 @@ namespace Server
         {
             services.AddGrpc();
 
-            services.AddTransient<IDbHelper, DbHelper>();
-            
-            services.AddScoped<IDbContext, DbContextDapper>();
-            services.AddScoped<IEncrypt, Encryption>();
-            services.Configure<AppConfig>(Configuration.GetSection("Costum"));
+            CurrentAppConfig = new AppConfig(Configuration.GetSection("Costum"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

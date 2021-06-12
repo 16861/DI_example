@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
-using Microsoft.Extensions.Options;
 
 using Server.Abstract;
 using Server.Config;
@@ -13,9 +12,9 @@ namespace Server.Crypto
     {
         readonly string EncryptionKey = "";
 
-        public Encryption(IOptions<AppConfig> appConfig)
+        public Encryption(AppConfig appConfig)
         {
-            EncryptionKey = appConfig.Value.EncryptionKey;
+            EncryptionKey = appConfig.EncryptionKey;
         }
 
         public string Encrypt(string input) {
