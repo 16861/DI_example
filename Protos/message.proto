@@ -23,7 +23,6 @@ message SentMessage {
 message StatusReply {
   int32 statusCode = 1;
   string message = 2;
-  string time = 3;
 }
 
 message UserMessage {

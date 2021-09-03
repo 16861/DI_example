@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Dapper;
-using System.Data.SQLite;
-using System.Data;
 
 using Server.Database;
 using Server.Abstract;
@@ -41,7 +33,7 @@ namespace Server
 
             services.AddTransient<IDbHelper, DbHelper>();
             
-            services.AddScoped<IDbContext, DbContextDapper>();
+            services.AddScoped<IMessageHandler, SqlLiteHandler>();
             services.AddScoped<IEncrypt, Encryption>();
             services.Configure<AppConfig>(Configuration.GetSection("Costum"));
         }
