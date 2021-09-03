@@ -22,7 +22,11 @@ namespace Server.Database
        }
 
        public IEnumerable<MessageModel> GetAllMessages(long requestTime) {
-           return conn.Query<MessageModel>($"select * from Messages where time > {requestTime}");
+           foreach(var message in conn.Query<MessageModel>($"select * from Messages where time > {requestTime}")) {
+                if (message.IsEncrypted == 1)
+                    message.Text = _encrypt.Decrypt(message.Text);
+                yield return message;
+           }
        } 
 
        public void SaveNewMessage(MessageModel message) {
