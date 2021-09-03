@@ -8,7 +8,6 @@ using System.Data.SQLite;
 
 
 using Messange;
-using Server.Abstract;
 using Server.Models;
 using Server.Database;
 using Server.Crypto;
@@ -18,8 +17,8 @@ namespace Server
     public class MessengerServer : Messenger.MessengerBase
     {
         private readonly ILogger<MessengerServer> _logger;
-        IDbContext _dbContext;
-        IEncrypt _encrypt;
+        DbContextDapper _dbContext;
+        Encryption _encrypt;
         public MessengerServer(ILogger<MessengerServer> logger)
         {
             _logger = logger;

@@ -3,12 +3,11 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
-using Server.Abstract;
 using Server.Config;
 
 namespace Server.Crypto
 {
-    public class Encryption : IEncrypt
+    public class Encryption
     {
         readonly string EncryptionKey = "";
 

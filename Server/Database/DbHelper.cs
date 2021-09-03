@@ -1,13 +1,11 @@
 using System.Data.SQLite;
 using System.Data;
 
-
-using Server.Abstract;
 using Server.Config;
 
 namespace Server.Database
 {
-    public class DbHelper : IDbHelper
+    public class DbHelper
     {
         string sqllite3ConnectionString;
 
