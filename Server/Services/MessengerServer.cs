@@ -16,12 +16,11 @@ namespace Server
 {
     public class MessengerServer : Messenger.MessengerBase
     {
-        private readonly ILogger<MessengerServer> _logger;
         DbContextDapper _dbContext;
         Encryption _encrypt;
-        public MessengerServer(ILogger<MessengerServer> logger)
+
+        public MessengerServer()
         {
-            _logger = logger;
             _dbContext = new DbContextDapper(new DbHelper(Startup.CurrentAppConfig));
             _encrypt = new Encryption(Startup.CurrentAppConfig);
         }
