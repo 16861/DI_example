@@ -13,19 +13,14 @@ namespace Server
     public class MessengerServer : Messenger.MessengerBase
     {
         readonly IMessageHandler _messageHandler;
-        readonly IEncrypt _encrypt;
-        public MessengerServer(IMessageHandler messageHandler, IEncrypt encrypt)
+        public MessengerServer(IMessageHandler messageHandler)
         {
             _messageHandler = messageHandler;
-            _encrypt = encrypt;
         }
 
         public override Task<StatusReply> Recieve(SentMessage request, ServerCallContext context)
         {
-            if (request.IsEncrypted) 
-                request.Text = _encrypt.Encrypt(request.Text);
-
-            _messageHandler.SaveNewMessage(GenericMapper.Map<SentMessage, MessageModel>(request));
+            _messageHandler.SaveNewMessage(GenericMapper.Map<SentMessage, MessageModel>(request), request.IsEncrypted);
 
             return Task.FromResult(new StatusReply
             {
@@ -34,7 +29,7 @@ namespace Server
             });
         }
         public override Task<AllMessagesReply> GetAllMessages(AllMessageRequest request, ServerCallContext context) {
-            var requestTime = Int64.Parse(request.Time);
+            var requestTime = Int64.Parse(request.Time); //TODO check that parsing done withot errors
             
             AllMessagesReply reply = new AllMessagesReply() {
                 StatusCode = 0

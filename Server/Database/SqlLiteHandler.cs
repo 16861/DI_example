@@ -29,9 +29,11 @@ namespace Server.Database
            }
        } 
 
-       public void SaveNewMessage(MessageModel message) {
+       public void SaveNewMessage(MessageModel message, bool isEncrypted) {
            string insertQuery = "INSERT INTO Messages(name, text, time, isencrypted) values(@name, @text, @time, @isencrypted)";
            var time = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+           if (isEncrypted)
+            message.Text = _encrypt.Encrypt(message.Text);
            conn.Execute(insertQuery, new {message.Name, message.Text, time, message.IsEncrypted});
 
            UpdateVersion(((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString());
